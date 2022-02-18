@@ -1,0 +1,4 @@
+123456;Jon;By;1997;M
+987754;Jon;Doe;1940;M
+549234;Kari;Normann;1943;K
+898438;Bjørg;Olsen;1930;K

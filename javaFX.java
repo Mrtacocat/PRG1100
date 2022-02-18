@@ -1,7 +1,3 @@
-/*
-  Programforklaring
-*/
-
 import static java.lang.System.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -11,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class Eksempel extends Application {
+public class javaFX extends Application {
     
     @Override
     public void start(Stage primaryStage) {
@@ -29,7 +25,7 @@ public class Eksempel extends Application {
         root.getChildren().add(btn);
 
  Scene scene = new Scene(root, 300, 250);
-
+  
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
