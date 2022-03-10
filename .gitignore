@@ -1,4 +1,9 @@
 **/*.class
+**/*.jar
+**/*.def
+**/*.dll
+**/*.zip
+**/*.exe
 javafx-sdk*/
 easygraphics.*
 **/*.pdf
