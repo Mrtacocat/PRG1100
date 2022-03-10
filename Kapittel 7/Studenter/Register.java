@@ -46,6 +46,8 @@ public class Register {
 
                 // Setter inn en ny student
                 // Detaljert dialog for å hente data til nytt objekt
+
+                
             
         }
         catch (NumberFormatException e){
