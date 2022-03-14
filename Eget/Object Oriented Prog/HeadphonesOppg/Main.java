@@ -24,7 +24,7 @@ public class Main {
 
 
     out.println(h.volume);
-    p.volumeUp();
+    h.volumeUp();
 
   }
 
