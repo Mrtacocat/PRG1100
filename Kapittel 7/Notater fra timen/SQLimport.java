@@ -10,8 +10,12 @@ public class SQLimport {
             String sql = "create table Vare(Nr integer primary key, "
                        + "Navn varchar(50), Pris decimal(8, 2); Antall integer);";
             stmt.executeUpdate(sql);
+
+            
             con.close();
             out.println("Vellykket oppkobling til databasen!");
+
+            
         
     }
 }
