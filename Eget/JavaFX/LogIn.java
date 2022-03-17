@@ -44,9 +44,5 @@ public class LogIn extends Application {
 
         PasswordField pwBox = new PasswordField();
         grid.add(pw, 1, 2);
-
     }
-
-
-
 }
