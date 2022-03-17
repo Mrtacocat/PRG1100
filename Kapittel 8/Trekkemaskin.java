@@ -48,11 +48,10 @@ public class Trekkemaskin extends Application {
     int start = parseInt(min.getText());
     int slutt = parseInt(max.getText());
     int tall = Min.trekkTall(start, slutt); 
-     
+    tekstfelt.setText("" + tall);
     } catch (NumberFormatException ex){
       tekstfelt.setText("Mangler min/max");
     }
-    
   }
 
   public static void main(String[] args) {
