@@ -1,13 +1,15 @@
 import static java.lang.System.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*; // FlowPane
+import javafx.scene.control.*; // Button, TextField
+import javafx.event.*;
 
 public class Knappetest extends Application {
     
+    int antall = 0;
     Button knapp;
     TextField tekstfelt;
 
@@ -17,6 +19,7 @@ public class Knappetest extends Application {
     public void start(Stage vindu) {
         FlowPane panel = new FlowPane();
         knapp = new Button("Klikk her!");
+        knapp.setOnAction(e -> behandleKlikk(e));
         tekstfelt = new TextField();
         tekstfelt.setPrefColumnCount(15);
         panel.getChildren().addAll(knapp, tekstfelt);
@@ -25,8 +28,10 @@ public class Knappetest extends Application {
         vindu.setScene(scene);
         vindu.show();
     }
-    public void behandleKlikk() {
+    public void behandleKlikk(ActionEvent e) {
         // Aktivitet/Hendelseshåndtering
+        antall++;
+        tekstfelt.setText("Antall klikk = " + antall);
 
     }
 
