@@ -4,6 +4,8 @@
 
 import static java.lang.System.*;
 
+import java.io.IOException;
+
 import javax.swing.Action;
 
 import javafx.application.Application;
@@ -54,6 +56,16 @@ public class button extends Application {
 
 
 
+    }
+
+    @FXML
+    private void handleBtnNewWindow(ActionEvent e) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("fxmldokumment.fxml"));
+        Stage stage = new stage();
+        Scene scene = new Scene(root);
+        stage.setTitle("new window");
+        stage.setScene(scene);
+        stage.show();
     }
  public static void main(String[] args) {
         launch(args);

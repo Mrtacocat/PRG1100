@@ -29,7 +29,7 @@ public class Tekstendring extends Application {
       String tekst = tekstfelt.getText();
       //tekst = tekst.replace('!', ' ');
       tekst = tekst.replaceAll("(!|,|\\.|\\?)+", "");
-    tekstfelt.setText(tekst);
+      tekstfelt.setText(tekst);
   }
 
   public static void main(String[] args) {
