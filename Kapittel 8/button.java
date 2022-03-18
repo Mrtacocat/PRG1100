@@ -44,7 +44,7 @@ public class button extends Application {
         // add button
         r.getChildren().add(b);
         r.getChildren().add(l);
-
+        
         // create a scene
         Scene sc = new Scene(r, 200, 200);
 

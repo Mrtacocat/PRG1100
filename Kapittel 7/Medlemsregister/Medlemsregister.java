@@ -20,6 +20,7 @@ public class Medlemsregister {
          Statement stmt = conn.createStatement();
          //stmt.executeUpdate(sql);
 
+         // insert en linje om gangen 
          
       }
       catch (SQLException e) {
