@@ -7,23 +7,13 @@ import java.util.*;
 import java.io.*;
 import java.sql.*;
 
-public class Medlemsregister { 
-  
 
-  // Her kobles det til databasen.
-  private Connection connect() {
-  String url = "jdbc:sqlite:medlemmer.db";
-  Connection conn = null; 
-  
-  try {
-    conn = DriverManager.getConnection(url);
-  } catch (SQLException e) {
-    out.println(e.getMessage());
-  } 
-  return conn;
-}
-          
-  private static File dbFil = new File("register.txt");
+public class Medlemsregister { 
+  private static String driver   = "org.sqlite.JDBC"; 
+  private static String url      = "jdbc:sqlite:medlemmer.db";
+  private static Connection conn = null;  
+
+  private static File dbFil = new File("medlemmer.db");
   public static void main(String[] args) {
     if (!dbFil.exists())   
     lagNyTabell();               
@@ -57,31 +47,47 @@ public class Medlemsregister {
    }
 
   private static void lagNyTabell() {  
-      String sql = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);";
-
-      try (Connection conn = this.connect())
+    
+    try { 
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement();  
+      String sql = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);"; 
+      stmt.executeUpdate(sql);   
+      conn.close(); 
+    }
+    catch (SQLException e) { 
+      out.println("feilet, grunn: " + e.toString()); 
+    }
     showMessageDialog(null, "Start: Lager db-tabellen Medlem"); 
   } 
+
   public static void visAlleEtternavn() {   
     showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
   }
+
   public static void visAlleTlf() { 
     showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");
   }  
+
   // Husk å skrive logg-meldinger i konsollet for endringsmetoder!
   private static void registrereMedlem() { 
     showMessageDialog(null, "3: registrere nytt medlem");
-  }  
+  } 
+
   private static void endreMedlem() { 
     showMessageDialog(null, "4: Endre eller legge til tlf.nr"); 
   }  
+
   private static void slettMedlem() { 
     showMessageDialog(null, "5: Slette medlem"); 
   }
+
   private static void taBackup() { 
     showMessageDialog(null, "6: Ta backup");
   }
+
   private static void hentBackup() { 
     showMessageDialog(null, "7: Hent backup");
   }
+
 }
