@@ -8,35 +8,41 @@ import java.io.*;
 import java.sql.*;
 
 public class Medlemsregister { 
-          
-  private static File dbFil = new File("medlemmer.db");
-  public static void main(String[] args) { 
-      Connection conn = null; 
-    try {  
-      conn = DriverManager.getConnection(dbFil);
-      Statement stmt = conn.createStatement();
-      
-    if (!dbFil.exists())   
-      lagNyTabell();               
-    int valg = 0;
-    do {
-      valg = visMeny(); 
-      if (valg != 0 )  
-        switch ( valg ) { 
-          case 1: visAlleEtternavn(); break;
-          case 2: visAlleTlf();       break;
-          case 3: registrereMedlem();    break;
-          case 4: endreMedlem();      break;
-          case 5: slettMedlem();      break;
-          case 6: taBackup();         break;
-          case 7: hentBackup();       break;
-          default: break;
-        }
-    } while ( valg != 0);  
+  
+
+  // Her kobles det til databasen.
+  private Connection connect() {
+  String url = "jdbc:sqlite:medlemmer.db";
+  Connection conn = null; 
+  
+  try {
+    conn = DriverManager.getConnection(url);
   } catch (SQLException e) {
-    out.println("Tilkobling feilet: " + e.toString());
-  }
-  }  
+    out.println(e.getMessage());
+  } 
+  return conn;
+}
+          
+  private static File dbFil = new File("register.txt");
+  public static void main(String[] args) {
+    if (!dbFil.exists())   
+    lagNyTabell();               
+  int valg = 0;
+  do {
+    valg = visMeny(); 
+    if (valg != 0 )  
+      switch ( valg ) { 
+        case 1: visAlleEtternavn(); break;
+        case 2: visAlleTlf();       break;
+        case 3: registrereMedlem();    break;
+        case 4: endreMedlem();      break;
+        case 5: slettMedlem();      break;
+        case 6: taBackup();         break;
+        case 7: hentBackup();       break;
+        default: break;
+      }
+  } while ( valg != 0);  
+}   
   // Hjelpemetoder kun til bruk i dette programmet
   public static int visMeny() {   
     String meny = "[1] Vis alle etternavn" + "\n" 
@@ -51,8 +57,9 @@ public class Medlemsregister {
    }
 
   private static void lagNyTabell() {  
-      stmt.executeUpdate("DROP TABLE IF EXISTS Medlemtest;");
-      stmt.executeUpdate("CREATE TABLE Medlem(Nr INTEGER PRIMARY KEY, Fornavn CHAR(20), Etternavn CHAR(20), Adresse CHAR(50), Telefon INTEGER);");
+      String sql = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);";
+
+      try (Connection conn = this.connect())
     showMessageDialog(null, "Start: Lager db-tabellen Medlem"); 
   } 
   public static void visAlleEtternavn() {   
