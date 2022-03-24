@@ -12,9 +12,10 @@ public class Medlemsregister {
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
   private static Connection conn = null;  
-
+  private static File register = new File("register.txt");
   private static File dbFil = new File("medlemmer.db");
   public static void main(String[] args) {
+   
     if (!dbFil.exists())   
     lagNyTabell();               
   int valg = 0;
@@ -45,27 +46,59 @@ public class Medlemsregister {
                 + "[0] Avslutt";    
     return parseInt(showInputDialog(meny + "\n" + "Velg et nr. (0-7):"));
    }
-
+   
+   
+  // databasen blir settet opp og tabellen medlem blir lagd
   private static void lagNyTabell() {  
-    
     try { 
       conn = DriverManager.getConnection(url);   
-      Statement stmt = conn.createStatement();  
-      String sql = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);"; 
-      stmt.executeUpdate(sql);   
+      //Statement stmt = conn.createStatement();  
+      String sql;// = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);"; 
+      //stmt.executeUpdate(sql);   
       conn.close(); 
     }
     catch (SQLException e) { 
-      out.println("feilet, grunn: " + e.toString()); 
+      out.println("feilet i LagNyTabell();, grunn: " + e.toString()); 
     }
     showMessageDialog(null, "Start: Lager db-tabellen Medlem"); 
   } 
 
-  public static void visAlleEtternavn() {   
+  public static void visAlleEtternavn() {  
+    try {
+      Scanner leser = new Scanner(register);
+
+      while ( leser.hasNextLine() ) {
+        String i = leser.nextLine();
+        out.println(i);
+      }
+      leser.close();
+    } catch (FileNotFoundException e ) {
+      e.printStackTrace();
+    }
+    try { 
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement(); 
+      String sql = "select * from Medlem order by Etternavn;";
+      stmt.executeQuery(sql);
+      conn.close(); 
+    }
+    catch (SQLException sqlex) {  
+      out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString());
+    }
     showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
   }
 
   public static void visAlleTlf() { 
+    
+    try {
+      conn = DriverManager.getConnection(url);
+      Statement stmt = conn.createStatement();
+      String sql = "select distinct Telefon from Medlem;";
+      stmt.executeQuery(sql);
+      conn.close();
+    } catch (SQLException sqlex) {  
+      out.print("Feilet i visAlleTlf();, grunn: " + sqlex.toString());
+    }
     showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");
   }  
 
