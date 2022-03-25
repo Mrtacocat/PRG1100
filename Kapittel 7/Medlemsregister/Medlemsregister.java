@@ -64,26 +64,34 @@ public class Medlemsregister {
   } 
 
   public static void visAlleEtternavn() {  
-    try {
+   
+    try { 
       Scanner leser = new Scanner(register);
 
       while ( leser.hasNextLine() ) {
         String i = leser.nextLine();
-        out.println(i);
       }
-      leser.close();
-    } catch (FileNotFoundException e ) {
-      e.printStackTrace();
-    }
-    try { 
       conn = DriverManager.getConnection(url);   
       Statement stmt = conn.createStatement(); 
+      
       String sql = "select * from Medlem order by Etternavn;";
-      stmt.executeQuery(sql);
+      ResultSet rs = stmt.executeQuery(sql);
+      while ( rs.next() ) {
+        int nr = rs.getInt("Nr");
+        String fNavn = rs.getString("Fornavn");
+        String eNavn = rs.getString("Etternavn");
+        String adresse = rs.getString("Adresse");
+        int telefon = rs.getInt("Telefon");
+        out.println(nr + " - " + eNavn + " - " + fNavn + " - " + adresse + " - " + telefon);
+      }
+      leser.close();
       conn.close(); 
     }
     catch (SQLException sqlex) {  
       out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString());
+    }
+    catch (Exception e) {
+      e.toString();
     }
     showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
   }
