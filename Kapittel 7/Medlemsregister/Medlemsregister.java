@@ -9,7 +9,7 @@ import java.sql.*;
 
 
 public class Medlemsregister { 
-  final int MAX_ANT = 50000;
+  final int MAX_ANT = 2;
   final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
@@ -167,7 +167,7 @@ public class Medlemsregister {
     int antMedlem = 0;
     try {
       // Koden vi ønsker utført
-      Medlem[] medlemtabell = new Medlem[100];
+      Medlem[] medlemtabell = new Medlem[MAX_VALUE];
       int i = 0;
       // Åpner datastrøm
       
