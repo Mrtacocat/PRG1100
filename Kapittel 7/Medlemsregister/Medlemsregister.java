@@ -9,7 +9,7 @@ import java.sql.*;
 
 
 public class Medlemsregister { 
-  final int MAX_ANT = 25;
+  final int MAX_ANT = 50000;
   final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
@@ -56,8 +56,8 @@ public class Medlemsregister {
     try {  
       conn = DriverManager.getConnection(url);   
       Statement stmt = conn.createStatement();  
-      String sql;// = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);"; 
-     // stmt.executeUpdate(sql);   
+      String sql; // = "create table Medlem(Nr integer primary key, Fornavn varchar(20), Etternavn varchar(20), Adresse varchar(50), Telefon integer);"; 
+      //stmt.executeUpdate(sql);   
       conn.close(); 
     }
     catch (SQLException e) { 
@@ -68,7 +68,7 @@ public class Medlemsregister {
   } 
 
   public static void visAlleEtternavn() {  
-    
+    /*
     try { 
       
     conn = DriverManager.getConnection(url);   
@@ -87,26 +87,38 @@ public class Medlemsregister {
     }
     catch (FileNotFoundException e) {
       out.print("Fil ikke funnet: " + e.toString());
-    }
+    }*/
   }
 
   public static void visAlleTlf() { 
-    
+    /*hentBackup();
     try {
       conn = DriverManager.getConnection(url);
       Statement stmt = conn.createStatement();
       String sql = "select distinct Telefon from Medlem;";
       stmt.executeQuery(sql);
       conn.close();
-    } catch (SQLException sqlex) {  
+    } 
+    catch (SQLException sqlex) {  
       out.print("Feilet i visAlleTlf();, grunn: " + sqlex.toString());
+    } 
+    catch (FileNotFoundException e) {
+      out.print(e.toString());
     }
-    showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");
+    showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");*/
   }  
 
   // Husk å skrive logg-meldinger i konsollet for endringsmetoder!
   private static void registrereMedlem() { 
+    try {
+    conn = DriverManager.getConnection(url);   
+    Statement stmt = conn.createStatement(); 
+    stmt.executeUpdate("insert into Medlem values(40,'Per','Nilsen','Mellomvegen 2', 'Bergen'");
     showMessageDialog(null, "3: registrere nytt medlem");
+    }
+    catch (SQLException sqlex) {
+      out.println(sqlex.toString());
+    }
   } 
 
   private static void endreMedlem() { 
@@ -114,7 +126,15 @@ public class Medlemsregister {
   }  
 
   private static void slettMedlem() { 
+    try {
+    conn = DriverManager.getConnection(url);   
+    Statement stmt = conn.createStatement(); 
+    stmt.executeUpdate("delete from Medlem where Nr=5");
     showMessageDialog(null, "5: Slette medlem"); 
+  } 
+  catch (SQLException sqlex) {
+    out.println(sqlex.toString());
+  }
   }
 
   private static void taBackup() { 
@@ -133,9 +153,9 @@ public class Medlemsregister {
     }
     skriver.close();
   } catch (FileNotFoundException e) {
-    out.println("Feilet, grunn: " + e.toString());
+    out.println(" Feilet, grunn: " + e.toString());
   } catch (SQLException sqlex) {
-    out.println("Feilet SQL, grunn: " + sqlex.toString());
+    out.println(" Feilet SQL, grunn: " + sqlex.toString());
   } 
 
     showMessageDialog(null, "6: Ta backup");
@@ -144,7 +164,7 @@ public class Medlemsregister {
 
   private static void hentBackup() { 
     Scanner leser = null; 
-    int antStud = 0;
+    int antMedlem = 0;
     try {
       // Koden vi ønsker utført
       Medlem[] medlemtabell = new Medlem[100];
@@ -157,18 +177,25 @@ public class Medlemsregister {
           // Splitter tekstlinja i enkeltelement
           String[] datatab = linje.split(";");
           int nr = parseInt(datatab[0]);
-          String fornavn = datatab[1];
-          String etternavn = datatab[2];
-          int tlf = parseInt(datatab[3]);
-          medlemtabell[i++] = new Medlem(nr,fornavn,etternavn,tlf);
+          int tlf = parseInt(datatab[1]);
+          String fornavn = datatab[2];
+          String etternavn = datatab[3];
+          String adresse  = datatab[4];
+          medlemtabell[i++] = new Medlem(nr,tlf,fornavn,etternavn,adresse);
       }
       leser.close();
-      antStud = i;
+      antMedlem = i;
+
+      // Kvitterer medlemsliste
+      String liste = "Registrerte Medlemmer" + "\n";
+      for (i=0; i<antMedlem; i++) 
+          liste += medlemtabell[i].toString() + "\n";
+          showMessageDialog(null, liste);
 
     } catch (Exception e) {
       out.println(e.toString());
     } finally {
-      // Avslutter kontrollert
+      // Avslutter kontrollertB
       if ( leser != null )
       leser.close();
   }
