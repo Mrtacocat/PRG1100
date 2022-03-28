@@ -68,7 +68,7 @@ public class Medlemsregister {
   } 
 
   public static void visAlleEtternavn() {  
-    /*
+  
     try { 
       
     conn = DriverManager.getConnection(url);   
@@ -85,9 +85,7 @@ public class Medlemsregister {
     catch (SQLException sqlex) {  
       out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString());
     }
-    catch (FileNotFoundException e) {
-      out.print("Fil ikke funnet: " + e.toString());
-    }*/
+  
   }
 
   public static void visAlleTlf() { 
@@ -138,6 +136,7 @@ public class Medlemsregister {
   }
 
   private static void taBackup() { 
+    hentBackup();
     try {
     conn = DriverManager.getConnection(url);
     Statement stmt = conn.createStatement();
@@ -163,9 +162,13 @@ public class Medlemsregister {
   }
 
   private static void hentBackup() { 
+    
+    showMessageDialog(null, "7: Hent backup");
     Scanner leser = null; 
     int antMedlem = 0;
     try {
+      conn = DriverManager.getConnection(url);
+      Statement stmt = conn.createStatement();
       // Koden vi ønsker utført
       Medlem[] medlemtabell = new Medlem[MAX_ANT];
       int i = 0;
@@ -190,27 +193,31 @@ public class Medlemsregister {
           i++;
       }
       leser.close();
-    
+      //stmt.executeUpdate("INSERT into Medlem" + medlemtabell.getNr() + ";" + medlemtabell.getFornavn() + ";" + medlemtabell.getEtternavn() + ";" + medlemtabell.getAdresse());
       antMedlem = i;
 
       // Kvitterer medlemsliste
       String liste = "Registrerte Medlemmer" + "\n";
       for (i=0; i<antMedlem; i++) 
           liste += medlemtabell[i].toString() + "\n";
+          
           showMessageDialog(null, liste);
 
-    } catch (FileNotFoundException e) {
+    } 
+      catch (FileNotFoundException e) {
       out.println(e.toString());
     }
-   catch (NumberFormatException ex) {
+      catch (NumberFormatException ex) {
       out.println("Feilet grunn: " + ex.toString());
     }
+      catch (SQLException sqlex) {
+        out.println("Feilet grunn: " + sqlex.toString());
+      }
     finally {
       // Avslutter kontrollertB
       if ( leser != null )
       leser.close();
   }
-    showMessageDialog(null, "7: Hent backup");
   }
 
   public static void connect() {
