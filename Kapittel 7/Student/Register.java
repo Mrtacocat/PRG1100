@@ -37,7 +37,7 @@ public class Register {
             }
             leser.close();
             antStud = i;
-
+//gdes
             // Kvitterer studentliste
             String liste = "Registrerte studenter" + "\n";
             for (i=0; i<antStud; i++) 
