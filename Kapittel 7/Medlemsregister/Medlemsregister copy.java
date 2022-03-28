@@ -9,7 +9,7 @@ import java.sql.*;
 
 
 public class Medlemsregister { 
-  final static int MAX_ANT = 100;
+  final static int MAX_VALUE = 100;
   final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
@@ -161,53 +161,48 @@ public class Medlemsregister {
   
   }
 
-  private static void hentBackup() { 
+  private static void getBackup() { 
     
-    showMessageDialog(null, "7: Hent backup");
-    Scanner leser = null; 
-    int antMedlem = 0;
+    showMessageDialog(null, "7: get backup");
+    Scanner sc = null; 
+    int member = 0;
+    
     try {
       conn = DriverManager.getConnection(url);
       Statement stmt = conn.createStatement();
-      // Koden vi ønsker utført
-      Medlem[] medlemtabell = new Medlem[MAX_ANT];
+
+      Member[] memberArray = new Member[MAX_VALUE]; // final static int MAX_VALUE = 100;
       int i = 0;
-      // Åpner datastrøm
-      
-      leser = new Scanner( new File("register.txt") );
-      while ( leser.hasNextLine() ) {
-          String linje = leser.nextLine();
-          // Splitter tekstlinja i enkeltelement
-          String[] datatab = linje.split(";");
+      sc = new Scanner( new File("register.txt") );
+
+      while ( sc.hasNextLine() ) {
+          String line = sc.nextLine();
+          String[] datatab = line.split(";");
           int nr = parseInt(datatab[0]);
-          String fornavn = datatab[1];
-          String etternavn = datatab[2];
-          String adresse  = datatab[3];
+          String firstname = datatab[1];
+          String surname = datatab[2];
+          String address  = datatab[3];
           if ( datatab.length > 4) {
-          int tlf = parseInt(datatab[4]);
-          medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
+          int telephone = parseInt(datatab[4]);
+            memberArray[i] = new Member(nr,firstname,surname,address,telephone);
           }
           else {
-          medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse);
+            memberArray[i] = new Member(nr,firstname,surname,address);
           }
           i++;
       }
 
-      for(int k = 0; k < medlemtabell.length; k++) {
-        
+      for(int k = 0; k < datatab.length; k++) {
+        // wants to insert values from register.txt here
       }
 
-      leser.close();
-     
+      sc.close();
+      member = i;
 
-      antMedlem = i;
-
-      // Kvitterer medlemsliste
-      String liste = "Registrerte Medlemmer" + "\n";
-      for (i=0; i<antMedlem; i++) 
-          liste += medlemtabell[i].toString() + "\n";
-          
-          showMessageDialog(null, liste);
+      String list = "Registered member" + "\n";
+      for (i=0; i<member; i++) 
+          list += memberArray[i].toString() + "\n";
+          showMessageDialog(null, list);
 
     } 
       catch (FileNotFoundException e) {
