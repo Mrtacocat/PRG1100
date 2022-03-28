@@ -177,11 +177,11 @@ public class Medlemsregister {
           // Splitter tekstlinja i enkeltelement
           String[] datatab = linje.split(";");
           int nr = parseInt(datatab[0]);
-          int tlf = parseInt(datatab[1]);
-          String fornavn = datatab[2];
-          String etternavn = datatab[3];
-          String adresse  = datatab[4];
-          medlemtabell[i++] = new Medlem(nr,tlf,fornavn,etternavn,adresse);
+          String fornavn = datatab[1];
+          String etternavn = datatab[2];
+          String adresse  = datatab[3];
+          int tlf = parseInt(datatab[4]);
+          medlemtabell[i++] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
       }
       leser.close();
       antMedlem = i;
@@ -192,9 +192,13 @@ public class Medlemsregister {
           liste += medlemtabell[i].toString() + "\n";
           showMessageDialog(null, liste);
 
-    } catch (Exception e) {
+    } catch (FileNotFoundException e) {
       out.println(e.toString());
-    } finally {
+    }
+   catch (NumberFormatException ex) {
+      out.println("Feilet grunn: " + ex.toString());
+    }
+    finally {
       // Avslutter kontrollertB
       if ( leser != null )
       leser.close();

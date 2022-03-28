@@ -15,19 +15,19 @@ public class Medlem {
 	//Bruker innkapsling - begrenset tilgang til objektvariablene
 
 	private int nr;
-	private int tlf;
-	private String adresse;
 	private String fornavn;
 	private String etternavn;
+	private String adresse;
+	private int tlf;
 
 
 	//Konstruktør
-	public Medlem(int inNr, int inTlf, String inFornavn, String inEnavn, String inAdresse) {
+	public Medlem(int inNr, String inFornavn, String inEnavn, String inAdresse, int inTlf) {
 		nr = inNr;
-        tlf = inTlf;
-		adresse = inAdresse;
 		fornavn = pent(inFornavn);
 		etternavn = pent(inEnavn);
+        tlf = inTlf;
+		adresse = inAdresse;
 	}
 
 	//Objektmetoder
