@@ -30,6 +30,10 @@ public class Medlem {
 		adresse = inAdresse;
 	}
 
+	public Medlem(int nr, String fornavn, String etternavn, String adresse) {
+		this(nr, fornavn, etternavn, adresse, 0);
+	}
+
 	//Objektmetoder
 	//get metoder for innkapsling
 	public int getNr(){return nr;}

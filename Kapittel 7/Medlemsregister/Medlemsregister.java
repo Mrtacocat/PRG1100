@@ -9,7 +9,7 @@ import java.sql.*;
 
 
 public class Medlemsregister { 
-  final int MAX_ANT = 2;
+  final static int MAX_ANT = 100;
   final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
@@ -167,7 +167,7 @@ public class Medlemsregister {
     int antMedlem = 0;
     try {
       // Koden vi ønsker utført
-      Medlem[] medlemtabell = new Medlem[MAX_VALUE];
+      Medlem[] medlemtabell = new Medlem[MAX_ANT];
       int i = 0;
       // Åpner datastrøm
       
@@ -180,10 +180,17 @@ public class Medlemsregister {
           String fornavn = datatab[1];
           String etternavn = datatab[2];
           String adresse  = datatab[3];
+          if ( datatab.length > 4) {
           int tlf = parseInt(datatab[4]);
-          medlemtabell[i++] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
+          medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
+          }
+          else {
+          medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse);
+          }
+          i++;
       }
       leser.close();
+    
       antMedlem = i;
 
       // Kvitterer medlemsliste
