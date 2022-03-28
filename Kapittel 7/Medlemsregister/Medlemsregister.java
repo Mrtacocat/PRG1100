@@ -9,13 +9,15 @@ import java.sql.*;
 
 
 public class Medlemsregister { 
+  final int MAX_ANT = 25;
+  final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
   private static Connection conn = null;  
   private static File register = new File("register.txt");
   private static File dbFil = new File("medlemmer.db");
   public static void main(String[] args) {
-   
+
     if (!dbFil.exists())   
     lagNyTabell();               
   int valg = 0;
@@ -50,50 +52,42 @@ public class Medlemsregister {
    
   // databasen blir settet opp og tabellen medlem blir lagd
   private static void lagNyTabell() {  
-    try { 
+
+    try {  
       conn = DriverManager.getConnection(url);   
-      //Statement stmt = conn.createStatement();  
+      Statement stmt = conn.createStatement();  
       String sql;// = "create table Medlem(Nr integer primary key, Fornavn char(20), Etternavn CHAR(20), Adresse char(50), Telefon integer);"; 
-      //stmt.executeUpdate(sql);   
+     // stmt.executeUpdate(sql);   
       conn.close(); 
     }
     catch (SQLException e) { 
-      out.println("feilet i LagNyTabell();, grunn: " + e.toString()); 
+      out.println("Feil: " + e.toString()); 
     }
+   
     showMessageDialog(null, "Start: Lager db-tabellen Medlem"); 
   } 
 
   public static void visAlleEtternavn() {  
-   
+    
     try { 
-      Scanner leser = new Scanner(register);
-
-      while ( leser.hasNextLine() ) {
-        String i = leser.nextLine();
-      }
-      conn = DriverManager.getConnection(url);   
-      Statement stmt = conn.createStatement(); 
       
-      String sql = "select * from Medlem order by Etternavn;";
+    conn = DriverManager.getConnection(url);   
+    Statement stmt = conn.createStatement(); 
+      String sql = "select Etternavn from Medlem order by Etternavn;";
       ResultSet rs = stmt.executeQuery(sql);
-      while ( rs.next() ) {
-        int nr = rs.getInt("Nr");
-        String fNavn = rs.getString("Fornavn");
-        String eNavn = rs.getString("Etternavn");
-        String adresse = rs.getString("Adresse");
-        int telefon = rs.getInt("Telefon");
-        out.println(nr + " - " + eNavn + " - " + fNavn + " - " + adresse + " - " + telefon);
+      while ( rs.next()) {
+        String eNavn = rs.getString("Etternavn"); 
+        out.println(eNavn);
       }
-      leser.close();
-      conn.close(); 
-    }
+      showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
+    
+    } 
     catch (SQLException sqlex) {  
       out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString());
     }
-    catch (Exception e) {
-      e.toString();
+    catch (FileNotFoundException e) {
+      out.print("Fil ikke funnet: " + e.toString());
     }
-    showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
   }
 
   public static void visAlleTlf() { 
@@ -124,11 +118,63 @@ public class Medlemsregister {
   }
 
   private static void taBackup() { 
+    try {
+    conn = DriverManager.getConnection(url);
+    Statement stmt = conn.createStatement();
+    PrintWriter skriver = new PrintWriter("BACKUPregister.txt");
+    String sql = "select * from Medlem;";
+    ResultSet rs = stmt.executeQuery(sql);
+    while ( rs.next() ) {
+      int nr = rs.getInt("Nr");
+      String fNavn = rs.getString("Fornavn");
+      String eNavn = rs.getString("Etternavn");
+      int telefon = rs.getInt("Telefon");
+      skriver.println(nr + ";" + fNavn + ";" + eNavn + ";" + telefon);
+    }
+    skriver.close();
+  } catch (FileNotFoundException e) {
+    out.println("Feilet, grunn: " + e.toString());
+  } catch (SQLException sqlex) {
+    out.println("Feilet SQL, grunn: " + sqlex.toString());
+  } 
+
     showMessageDialog(null, "6: Ta backup");
+  
   }
 
   private static void hentBackup() { 
+    Scanner leser = null; 
+    int antStud = 0;
+    try {
+      // Koden vi ønsker utført
+      Medlem[] medlemtabell = new Medlem[100];
+      int i = 0;
+      // Åpner datastrøm
+      
+      leser = new Scanner( new File("register.txt") );
+      while ( leser.hasNextLine() ) {
+          String linje = leser.nextLine();
+          // Splitter tekstlinja i enkeltelement
+          String[] datatab = linje.split(";");
+          int nr = parseInt(datatab[0]);
+          String fornavn = datatab[1];
+          String etternavn = datatab[2];
+          int tlf = parseInt(datatab[3]);
+          medlemtabell[i++] = new Medlem(nr,fornavn,etternavn,tlf);
+      }
+      leser.close();
+      antStud = i;
+
+    } catch (Exception e) {
+      out.println(e.toString());
+    } finally {
+      // Avslutter kontrollert
+      if ( leser != null )
+      leser.close();
+  }
     showMessageDialog(null, "7: Hent backup");
   }
 
+  public static void connect() {
+  }
 }
