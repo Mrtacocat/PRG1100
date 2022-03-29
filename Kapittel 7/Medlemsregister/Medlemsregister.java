@@ -9,33 +9,32 @@ import java.sql.*;
 
 
 public class Medlemsregister { 
-  final static int MAX_ANT = 100;
   final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
   private static Connection conn = null;  
-  private static File register = new File("register.txt");
-  private static File dbFil = new File("medlemmer.db");
-  public static void main(String[] args) {
+  private static File register   = new File("register.txt");
+  private static File dbFil      = new File("medlemmer.db");
+    public static void main(String[] args) {
 
-    if (!dbFil.exists())   
-    lagNyTabell();               
-  int valg = 0;
-  do {
-    valg = visMeny(); 
-    if (valg != 0 )  
-      switch ( valg ) { 
-        case 1: visAlleEtternavn(); break;
-        case 2: visAlleTlf();       break;
-        case 3: registrereMedlem();    break;
-        case 4: endreMedlem();      break;
-        case 5: slettMedlem();      break;
-        case 6: taBackup();         break;
-        case 7: hentBackup();       break;
-        default: break;
-      }
-  } while ( valg != 0);  
-}   
+      if (!dbFil.exists())   
+        lagNyTabell();               
+        int valg = 0;
+      do {
+        valg = visMeny(); 
+      if (valg != 0 )  
+        switch ( valg ) { 
+          case 1: visAlleEtternavn(); break;
+          case 2: visAlleTlf();       break;
+          case 3: registrereMedlem();    break;
+          case 4: endreMedlem();      break;
+          case 5: slettMedlem();      break;
+          case 6: taBackup();         break;
+          case 7: hentBackup();       break;
+          default: break;
+        }
+      } while ( valg != 0);  
+    }   
   // Hjelpemetoder kun til bruk i dette programmet
   public static int visMeny() {   
     String meny = "[1] Vis alle etternavn" + "\n" 
@@ -54,33 +53,43 @@ public class Medlemsregister {
   private static void lagNyTabell() {  
 
     try {  
+
       conn = DriverManager.getConnection(url);   
       Statement stmt = conn.createStatement();  
-      String sql; // = "create table Medlem(Nr integer primary key, Fornavn varchar(20), Etternavn varchar(20), Adresse varchar(50), Telefon integer);"; 
-      //stmt.executeUpdate(sql);   
+
+        String sql; //= "drop table if exists Medlem; create table Medlem(Nr integer, Fornavn varchar(20), Etternavn varchar(20), Adresse varchar(50), Telefon integer);"; 
+       //stmt.executeUpdate(sql);
+
       conn.close(); 
+
     }
     catch (SQLException e) { 
       out.println("Feil: " + e.toString()); 
     }
-   
+
     showMessageDialog(null, "Start: Lager db-tabellen Medlem"); 
+
   } 
 
   public static void visAlleEtternavn() {  
-  
-    try { 
-      
-    conn = DriverManager.getConnection(url);   
-    Statement stmt = conn.createStatement(); 
-      String sql = "select Etternavn from Medlem order by Etternavn;";
-      ResultSet rs = stmt.executeQuery(sql);
+    
+    showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
+   
+    try {      
+
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement(); 
+
+        String sql = "select Etternavn from Medlem order by Etternavn;";
+        ResultSet rs = stmt.executeQuery(sql);
+
       while ( rs.next()) {
-        String eNavn = rs.getString("Etternavn"); 
+        String eNavn = rs.getString("Etternavn");
         out.println(eNavn);
       }
-      showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
-    
+
+      conn.close();
+      
     } 
     catch (SQLException sqlex) {  
       out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString());
@@ -89,30 +98,40 @@ public class Medlemsregister {
   }
 
   public static void visAlleTlf() { 
-    /*hentBackup();
+
+    showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");
+
     try {
+
       conn = DriverManager.getConnection(url);
       Statement stmt = conn.createStatement();
-      String sql = "select distinct Telefon from Medlem;";
-      stmt.executeQuery(sql);
+
+        String sql = "select Telefon from Medlem;";
+        ResultSet rs = stmt.executeQuery(sql);
+        
       conn.close();
+
     } 
     catch (SQLException sqlex) {  
       out.print("Feilet i visAlleTlf();, grunn: " + sqlex.toString());
     } 
-    catch (FileNotFoundException e) {
-      out.print(e.toString());
-    }
-    showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");*/
+    
   }  
 
   // Husk å skrive logg-meldinger i konsollet for endringsmetoder!
   private static void registrereMedlem() { 
-    try {
-    conn = DriverManager.getConnection(url);   
-    Statement stmt = conn.createStatement(); 
-    stmt.executeUpdate("insert into Medlem values(40,'Per','Nilsen','Mellomvegen 2', 'Bergen'");
+
     showMessageDialog(null, "3: registrere nytt medlem");
+    
+    try {
+
+    conn = DriverManager.getConnection(url);   
+    Statement stmt = conn.createStatement();
+
+      stmt.executeUpdate("insert into Medlem values(39,'Anna','Sund','Kattegate 2, Stavanger', 49596979);");
+
+    conn.close();
+
     }
     catch (SQLException sqlex) {
       out.println(sqlex.toString());
@@ -125,10 +144,14 @@ public class Medlemsregister {
 
   private static void slettMedlem() { 
     try {
+
     conn = DriverManager.getConnection(url);   
     Statement stmt = conn.createStatement(); 
-    stmt.executeUpdate("delete from Medlem where Nr=5");
-    showMessageDialog(null, "5: Slette medlem"); 
+
+      stmt.executeUpdate("delete from Medlem where Nr=40");
+      showMessageDialog(null, "5: Slette medlem"); 
+
+    conn.close();
   } 
   catch (SQLException sqlex) {
     out.println(sqlex.toString());
@@ -136,21 +159,29 @@ public class Medlemsregister {
   }
 
   private static void taBackup() { 
-    hentBackup();
+    
     try {
-    conn = DriverManager.getConnection(url);
-    Statement stmt = conn.createStatement();
-    PrintWriter skriver = new PrintWriter("BACKUPregister.txt");
-    String sql = "select * from Medlem;";
-    ResultSet rs = stmt.executeQuery(sql);
-    while ( rs.next() ) {
-      int nr = rs.getInt("Nr");
-      String fNavn = rs.getString("Fornavn");
-      String eNavn = rs.getString("Etternavn");
-      int telefon = rs.getInt("Telefon");
-      skriver.println(nr + ";" + fNavn + ";" + eNavn + ";" + telefon);
-    }
+
+      conn = DriverManager.getConnection(url);
+      Statement stmt = conn.createStatement();
+
+        PrintWriter skriver = new PrintWriter("BACKUPregister.txt");
+        String sql = "select * from Medlem;";
+        ResultSet rs = stmt.executeQuery(sql);
+
+      while ( rs.next() ) {
+          int nr = rs.getInt("Nr");
+          String fNavn = rs.getString("Fornavn");
+          String eNavn = rs.getString("Etternavn");
+          String adresse = rs.getString("Adresse");
+          int telefon = rs.getInt("Telefon");
+          skriver.println(nr + ";" + fNavn + ";" + eNavn + ";" + adresse + ";" + telefon);
+      }
+
     skriver.close();
+    conn.close();
+    
+
   } catch (FileNotFoundException e) {
     out.println(" Feilet, grunn: " + e.toString());
   } catch (SQLException sqlex) {
@@ -164,13 +195,23 @@ public class Medlemsregister {
   private static void hentBackup() { 
     
     showMessageDialog(null, "7: Hent backup");
-    Scanner leser = null; 
+      
     int antMedlem = 0;
+
     try {
-      conn = DriverManager.getConnection(url);
-      Statement stmt = conn.createStatement();
+      
+        Scanner leser = new Scanner( new File("register.txt") );
+        while ( leser.hasNextLine() ) {
+          leser.nextLine();
+        antMedlem++;
+        }
+        leser.close();
+
+        conn = DriverManager.getConnection(url);
+        Statement stmt = conn.createStatement();
+
       // Koden vi ønsker utført
-      Medlem[] medlemtabell = new Medlem[MAX_ANT];
+      Medlem[] medlemtabell = new Medlem[antMedlem];
       int i = 0;
       // Åpner datastrøm
       
@@ -183,21 +224,24 @@ public class Medlemsregister {
           String fornavn = datatab[1];
           String etternavn = datatab[2];
           String adresse  = datatab[3];
-          if ( datatab.length > 4) {
-          int tlf = parseInt(datatab[4]);
-          medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
-          }
-          else {
-          medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse);
-          }
-          i++;
-      }
-
-      for(int k = 0; k < medlemtabell.length; k++) {
-        
+            
+            if ( datatab.length > 4) {
+              int tlf = parseInt(datatab[4]);
+              medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
+            } else {
+              medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse);
+            }
+            i++;
       }
 
       leser.close();
+
+      for(int k = 0; k < medlemtabell.length; k++) {
+        stmt.executeUpdate("insert into Medlem values(" + medlemtabell[k].getNr() + ",'" + medlemtabell[k].getFornavn() + "','" 
+                                                        + medlemtabell[k].getEtternavn() + "','" + medlemtabell[k].getAdresse() + "','" 
+                                                        + medlemtabell[k].getTlf() + "')");
+      }
+
      
 
       antMedlem = i;
@@ -219,12 +263,10 @@ public class Medlemsregister {
       catch (SQLException sqlex) {
         out.println("Feilet grunn: " + sqlex.toString());
       }
-    finally {
-      // Avslutter kontrollertB
-      if ( leser != null )
-      leser.close();
-  }
-  }
+      catch (Exception ee) {
+        out.println("Skriver feil: " + ee.toString());
+      }
+    }
 
   public static void connect() {
   }

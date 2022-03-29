@@ -1,5 +1,4 @@
-
-    /* Kapittel 5, oppgave
+/* Kapittel 5, oppgave
    Tekst om programmet
    C.W.R Jan 2022
 */
@@ -26,8 +25,8 @@ public class Medlem {
 		nr = inNr;
 		fornavn = pent(inFornavn);
 		etternavn = pent(inEnavn);
-        tlf = inTlf;
 		adresse = inAdresse;
+        tlf = inTlf;
 	}
 
 	public Medlem(int nr, String fornavn, String etternavn, String adresse) {
