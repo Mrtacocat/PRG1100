@@ -21,6 +21,5 @@
 28;Lene;Langnes;Golgata 2, Geilo;77766655
 32;Ola;Paloma;Nedvegen 17, Molde;88112233
 33;Hans olger;Lykken;Brattlia 11, Voss;98685511
-35;Olga;Lia;Stubbsveen, Eina;99665511
-36;Line;Jal;Krokvegen 34, Røros;0
-39;Anna;Sund;Kattegate 2, Stavanger;49596979
+35;Olga;Lia;Stubbsveen, Eina;43434343
+41;Anna;Sund;mhm 2;4343434

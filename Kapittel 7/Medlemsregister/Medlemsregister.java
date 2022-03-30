@@ -1,12 +1,13 @@
-/* Kodeskjelett test
- */ 
+/* Obligatorisk oppgave V-2022: Medlemsregister
+   Lag et medlemsregister for en landsdekkende organisasjon.
+   Christoffer W. Riis - Levert: 30.03.2022
+*/
 import static java.lang.System.*;
 import static javax.swing.JOptionPane.*; 
 import static java.lang.Integer.*;
 import java.util.*; 
 import java.io.*;
 import java.sql.*;
-
 
 public class Medlemsregister { 
   final String FIL = "register.txt";
@@ -48,127 +49,280 @@ public class Medlemsregister {
     return parseInt(showInputDialog(meny + "\n" + "Velg et nr. (0-7):"));
    }
    
-   
   // databasen blir settet opp og tabellen medlem blir lagd
   private static void lagNyTabell() {  
 
     try {  
 
+      // Koble opp med db-fil
       conn = DriverManager.getConnection(url);   
       Statement stmt = conn.createStatement();  
 
-        String sql; //= "drop table if exists Medlem; create table Medlem(Nr integer, Fornavn varchar(20), Etternavn varchar(20), Adresse varchar(50), Telefon integer);"; 
-       //stmt.executeUpdate(sql);
+      // Oppretter en tabell Medlem i db
+        String sql = "drop table if exists Medlem; create table Medlem(Nr integer, Fornavn varchar(20), Etternavn varchar(20), Adresse varchar(50), Telefon integer);"; 
+        stmt.executeUpdate(sql);
 
-      conn.close(); 
+      conn.close(); // kobler av
 
     }
+    // catch error melding
     catch (SQLException e) { 
       out.println("Feil: " + e.toString()); 
     }
 
     showMessageDialog(null, "Start: Lager db-tabellen Medlem"); 
+    out.println("Start: Lager db-tabellen Medlem");
 
   } 
 
+  // Vise alle Etternavn sortert i alfabetisk rekkefølge
   public static void visAlleEtternavn() {  
     
     showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
    
+    int antMedlem = 0;
+    String utskrift = "";
+
     try {      
 
+      // Koble opp med db-fil
       conn = DriverManager.getConnection(url);   
       Statement stmt = conn.createStatement(); 
 
-        String sql = "select Etternavn from Medlem order by Etternavn;";
-        ResultSet rs = stmt.executeQuery(sql);
-
-      while ( rs.next()) {
-        String eNavn = rs.getString("Etternavn");
-        out.println(eNavn);
+      // lager en array for å få inn data fra databasen
+      Medlem[] medlemtabell = new Medlem[antMedlem]; // Har brukt student.java som objekt
+      
+      // Bruker ResultSet når man skal printe ut en executeQuery
+      ResultSet rs = stmt.executeQuery("select * from Medlem order by Etternavn"); 
+      
+      // looper igjennom medlemtabellen (kun nr og tlf)
+      for(int j = 0; j<antMedlem; j++) {
+        utskrift += medlemtabell[j].getNr() + ",'" + medlemtabell[j].getTlf();
       }
 
-      conn.close();
+      // printer ut Etternavn i consolet
+      while ( rs.next()) {
+        int nr = rs.getInt("Nr");
+        String eNavn = rs.getString("Etternavn");
+        out.println(nr + " - " + eNavn);
+      } 
+      
+      conn.close(); // kobler av
       
     } 
+    // catch error melding
     catch (SQLException sqlex) {  
-      out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString());
+      out.print("Feilet i visAlleEtternavn();, grunn: " + sqlex.toString()); 
     }
   
   }
 
-  public static void visAlleTlf() { 
+  // Vise alle Telefonnummere sortert på nr
+  public static void visAlleTlf() {
 
     showMessageDialog(null, "2: Alle medlemmer med tlf, sortert på tlf.nr");
 
+    int antMedlem = 0;
+    String utskrift = "";
+
     try {
 
-      conn = DriverManager.getConnection(url);
-      Statement stmt = conn.createStatement();
+      // Koble opp med db-fil
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement(); 
 
-        String sql = "select Telefon from Medlem;";
-        ResultSet rs = stmt.executeQuery(sql);
-        
-      conn.close();
+      // lager en array for å få inn data fra databasen
+      Medlem[] medlemtabell = new Medlem[antMedlem]; // Har brukt student.java som objekt
+
+      // Bruker ResultSet når man skal printe ut en executeQuery
+      ResultSet rs = stmt.executeQuery("select * from Medlem order by Nr");
+
+      // looper igjennom medlemtabellen (kun nr og tlf)
+      for(int j = 0; j<antMedlem; j++) {
+        utskrift += medlemtabell[j].getNr() + ",'" + medlemtabell[j].getTlf();
+      }
+
+      // printer ut telefonnr i consolet
+        while ( rs.next() ) {
+          int nr = rs.getInt("Nr");
+          int tlf = rs.getInt("Telefon");
+          out.println(nr + " - " + tlf);
+        }
+
+      conn.close(); // kobler av
 
     } 
+    // catch error melding
     catch (SQLException sqlex) {  
       out.print("Feilet i visAlleTlf();, grunn: " + sqlex.toString());
     } 
     
   }  
 
-  // Husk å skrive logg-meldinger i konsollet for endringsmetoder!
+  // Registrere ny medlem i db
   private static void registrereMedlem() { 
 
     showMessageDialog(null, "3: registrere nytt medlem");
-    
+
+    String utskrift = "";
+    int antMedlem = 0;
+
     try {
 
-    conn = DriverManager.getConnection(url);   
-    Statement stmt = conn.createStatement();
+      // Koble opp med db-fil
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement(); 
 
-      stmt.executeUpdate("insert into Medlem values(39,'Anna','Sund','Kattegate 2, Stavanger', 49596979);");
+      // lager en array for å få inn data fra databasen
+      Medlem[] medlemtabell = new Medlem[antMedlem]; // Har brukt student.java som objekt
 
-    conn.close();
+      // selecter hele medlems tabellen
+      stmt.executeQuery("select * from Medlem");
+
+      // looper igjennom medlemtabellen 
+      for(int j = 0; j<antMedlem; j++) {
+        utskrift += medlemtabell[j].getNr() + ",'" + medlemtabell[j].getFornavn() + "','" 
+                  + medlemtabell[j].getEtternavn() + "','" + medlemtabell[j].getAdresse() + "','" 
+                  + medlemtabell[j].getTlf();
+      }
+
+      // legger inn data til ny medlem
+      int nrNy = parseInt(showInputDialog("Skriv Nr: " + utskrift));
+      out.println("Nummer: " + nrNy);
+      String fornavnNy = showInputDialog("Skriv fornavn", utskrift);
+      out.println("Fornavn: " + fornavnNy);
+      String etternavnNy = showInputDialog("Skriv etternavn: " + utskrift);
+      out.println("Etternavn: " + etternavnNy);
+      String adresseNy = showInputDialog("Skriv adresse:" + utskrift);
+      out.println("Adresse: " + adresseNy);
+      int telefonNy = parseInt(showInputDialog("Skriv Telefon: " + utskrift));
+      out.println("Telefon: " + telefonNy);
+      
+      // legger inn nytt medlem med en executeUpdate
+      stmt.executeUpdate("insert into Medlem values(" + nrNy + ",'" + fornavnNy + "','" 
+      + etternavnNy + "','" + adresseNy + "','" + telefonNy + "')");
+
+      // driftsmelding
+      out.println("Lagt til: " + nrNy + ";" + fornavnNy + ";" + etternavnNy + ";" + adresseNy + ";" + telefonNy);
+
+    conn.close(); // kobler av
 
     }
+    // catch error melding
     catch (SQLException sqlex) {
       out.println(sqlex.toString());
     }
   } 
 
+  // Endre telefonr eller legg til telefonnr
   private static void endreMedlem() { 
-    showMessageDialog(null, "4: Endre eller legge til tlf.nr"); 
-  }  
 
-  private static void slettMedlem() { 
+    showMessageDialog(null, "4: Endre eller legge til tlf.nr"); 
+
+    String utskrift = "";
+    int antMedlem = 0;
+
     try {
 
-    conn = DriverManager.getConnection(url);   
-    Statement stmt = conn.createStatement(); 
+      // Koble opp med db-fil
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement(); 
+      
+      // lager en array for å få inn data fra databasen
+      Medlem[] medlemtabell = new Medlem[antMedlem]; // Har brukt student.java som objekt
+      
+      // selecter hele medlems tabellen
+      stmt.executeQuery("select * from Medlem");
 
-      stmt.executeUpdate("delete from Medlem where Nr=40");
-      showMessageDialog(null, "5: Slette medlem"); 
+      // looper igjennom medlemtabellen (kun nr og tlf)
+      for(int j = 0; j<antMedlem; j++) {
+        utskrift += medlemtabell[j].getNr() + ",'" + medlemtabell[j].getTlf();
+      }
 
-    conn.close();
+      // endre medlem ved å skrive først nr deretter skrive nytt nr
+      int selected = parseInt(showInputDialog("Skriv nummer på medlem for endring: ", utskrift));
+      out.println("Du har valgt nummer: " + selected); // driftsmelding
+      int endring = parseInt(showInputDialog("Legg til nytt nummer eller endre ditt gamle: "));
+      stmt.executeUpdate("update Medlem set Telefon = " + endring + " where Nr = " + selected);
+      
+      // driftsmelding
+      showMessageDialog(null, "Endret til: " + endring);
+      out.println("Endret til: " + endring); 
+      
+      conn.close(); // kobler av
+
+    }
+    // catch error melding
+    catch (SQLException sqlex) {
+      out.println("SQL feilet: " + sqlex.toString());
+    }
+  }  
+
+  // Slett medlem fra db
+  private static void slettMedlem() { 
+
+    showMessageDialog(null, "5: Slette medlem"); 
+
+    String utskrift = "";
+    int antMedlem = 0;
+
+    try {
+
+      // Koble opp med db-fil
+      conn = DriverManager.getConnection(url);   
+      Statement stmt = conn.createStatement(); 
+
+      // lager en array for å få inn data fra databasen
+      Medlem[] medlemtabell = new Medlem[antMedlem]; // Har brukt student.java som objekt
+    
+      // selecter hele medlems tabellen
+      stmt.executeQuery("select * from Medlem");
+
+      // looper igjennom medlemtabellen (kun nr)
+      for(int j = 0; j<antMedlem; j++) {
+        utskrift += medlemtabell[j].getNr() ;
+      }
+
+
+      // Sletting av medlem ved å skrive nr på hvilken du skal slette deretter skriver du 1 for å bekrefte
+      int selected = parseInt(showInputDialog("Skriv nummer på medlem for sletting: " + utskrift));
+      out.println("Du har valgt nummer: " + selected); // driftsmelding
+      
+      int bekreftelse = parseInt(showInputDialog("Sikker? trykk '1' for å gå videre."));
+
+      // hvis bekreftelse er lik 1 så deleter du medlem
+      if(bekreftelse == 1) {
+        stmt.executeUpdate("delete from medlem where nr = " + selected + ";");
+        out.println("Medlem NR: " + selected + " er fjernet fra lista"); // driftsmelding
+      }
+      else {
+        // driftsmelding
+        out.println("Failed to delete");
+      }
+
+    conn.close(); // kobler av
   } 
+  // catch error melding
   catch (SQLException sqlex) {
     out.println(sqlex.toString());
   }
   }
 
+  // Ta backup (.txt)
   private static void taBackup() { 
     
     try {
 
+      // Koble opp med db-fil
       conn = DriverManager.getConnection(url);
       Statement stmt = conn.createStatement();
 
+      // Tar backup av tabellen, skriver til en txt-fil
         PrintWriter skriver = new PrintWriter("BACKUPregister.txt");
-        String sql = "select * from Medlem;";
-        ResultSet rs = stmt.executeQuery(sql);
+        String sql = "select * from Medlem order by Nr;";
+        ResultSet rs = stmt.executeQuery(sql); // Bruker ResultSet når du bruker executeQuery
 
+      // Skriver backupfil looper igjennom alle medlemmer
       while ( rs.next() ) {
           int nr = rs.getInt("Nr");
           String fNavn = rs.getString("Fornavn");
@@ -178,10 +332,15 @@ public class Medlemsregister {
           skriver.println(nr + ";" + fNavn + ";" + eNavn + ";" + adresse + ";" + telefon);
       }
 
-    skriver.close();
+      // driftsmelding
+      out.println("Backup er tatt!");
+
+      // kobler av
+    skriver.close(); 
     conn.close();
     
 
+  // catch error melding
   } catch (FileNotFoundException e) {
     out.println(" Feilet, grunn: " + e.toString());
   } catch (SQLException sqlex) {
@@ -192,6 +351,7 @@ public class Medlemsregister {
   
   }
 
+  // Hente backup
   private static void hentBackup() { 
     
     showMessageDialog(null, "7: Hent backup");
@@ -199,23 +359,25 @@ public class Medlemsregister {
     int antMedlem = 0;
 
     try {
-      
+
         Scanner leser = new Scanner( new File("register.txt") );
         while ( leser.hasNextLine() ) {
           leser.nextLine();
-        antMedlem++;
+          antMedlem++;
         }
         leser.close();
 
+      // Koble opp med db-fil
         conn = DriverManager.getConnection(url);
         Statement stmt = conn.createStatement();
 
-      // Koden vi ønsker utført
-      Medlem[] medlemtabell = new Medlem[antMedlem];
+      // lager en array for å få inn data fra databasen 
+      Medlem[] medlemtabell = new Medlem[antMedlem]; // Har brukt student.java som objekt
       int i = 0;
-      // Åpner datastrøm
       
+      // leser register.txt filen
       leser = new Scanner( new File("register.txt") );
+      // leser linje for linje med semikolon som split tegn
       while ( leser.hasNextLine() ) {
           String linje = leser.nextLine();
           // Splitter tekstlinja i enkeltelement
@@ -225,6 +387,7 @@ public class Medlemsregister {
           String etternavn = datatab[2];
           String adresse  = datatab[3];
             
+          // så lenge datatab.length er større enn 4 så skal den skrive ut tlf, hvis ikke så skriver du ut uten tlf
             if ( datatab.length > 4) {
               int tlf = parseInt(datatab[4]);
               medlemtabell[i] = new Medlem(nr,fornavn,etternavn,adresse,tlf);
@@ -234,14 +397,14 @@ public class Medlemsregister {
             i++;
       }
 
-      leser.close();
+      leser.close(); // closer
 
+      // setter inn alle verdiene inn i medlemtabellen
       for(int k = 0; k < medlemtabell.length; k++) {
         stmt.executeUpdate("insert into Medlem values(" + medlemtabell[k].getNr() + ",'" + medlemtabell[k].getFornavn() + "','" 
                                                         + medlemtabell[k].getEtternavn() + "','" + medlemtabell[k].getAdresse() + "','" 
                                                         + medlemtabell[k].getTlf() + "')");
       }
-
      
 
       antMedlem = i;
@@ -254,6 +417,7 @@ public class Medlemsregister {
           showMessageDialog(null, liste);
 
     } 
+    // catch error melding
       catch (FileNotFoundException e) {
       out.println(e.toString());
     }
@@ -267,7 +431,4 @@ public class Medlemsregister {
         out.println("Skriver feil: " + ee.toString());
       }
     }
-
-  public static void connect() {
-  }
 }

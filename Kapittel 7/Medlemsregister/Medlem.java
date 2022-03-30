@@ -1,6 +1,6 @@
-/* Kapittel 5, oppgave
-   Tekst om programmet
-   C.W.R Jan 2022
+/* Obligatorisk oppgave V-2022: Medlemsregister
+   Lag et medlemsregister for en landsdekkende organisasjon.
+   Christoffer W. Riis - Levert: 30.03.2022
 */
 import static java.lang.System.*;
 import static javax.swing.JOptionPane.*;
@@ -11,8 +11,6 @@ import java.util.*;
 
 public class Medlem {
 	//Objektvariabler-attrubutter-instans
-	//Bruker innkapsling - begrenset tilgang til objektvariablene
-
 	private int nr;
 	private String fornavn;
 	private String etternavn;
@@ -52,11 +50,6 @@ public class Medlem {
 	}
 	public String skrivEtternavn(){
 		return etternavn + " ; " + fornavn + " ; " + tlf + " ; " + adresse + " ; " + nr;
-	}
-	public boolean equals(Medlem annen){
-		if(annen == null)
-			return false;
-		return nr == annen.nr;
 	}
 	public String navn(){
 		return pent(etternavn) + ", " + pent(fornavn);
