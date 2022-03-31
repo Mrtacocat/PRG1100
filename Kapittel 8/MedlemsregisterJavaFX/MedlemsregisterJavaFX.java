@@ -21,8 +21,8 @@ import javafx.geometry.*;
 import javafx.scene.text.*;
 
 public class MedlemsregisterJavaFX extends Application { 
-  Button alleEtternavn, alleTlf, addMedlem, editMedlem, deleteMedlem, takeBackUp, getBackUp, exit;
-  TextField topText;
+  private Button alleEtternavn, alleTlf, addMedlem, editMedlem, deleteMedlem, takeBackUp, getBackUp, exit;
+  private TextField tekstfelt;
   final String FIL = "register.txt";
   private static String driver   = "org.sqlite.JDBC"; 
   private static String url      = "jdbc:sqlite:medlemmer.db";
@@ -56,6 +56,7 @@ public class MedlemsregisterJavaFX extends Application {
 
     alleEtternavn = new Button("Alle Etternavn");
     alleEtternavn.setMaxWidth(Double.MAX_VALUE);
+    alleEtternavn.setOnAction( e -> visAlleEtternavn(e));
     panel.add(alleEtternavn, 0, 1);
 
     alleTlf = new Button("Alle TelefonNR");
@@ -79,6 +80,7 @@ public class MedlemsregisterJavaFX extends Application {
     panel.add(takeBackUp, 0, 6);
 
     getBackUp = new Button("Hent Backup");
+    getBackUp.setOnAction( e -> hentBackup(e));
     getBackUp.setMaxWidth(Double.MAX_VALUE);
     panel.add(getBackUp, 0, 6);
 
@@ -116,9 +118,10 @@ public class MedlemsregisterJavaFX extends Application {
   } 
 
   // Vise alle Etternavn sortert i alfabetisk rekkefølge
-  public static void visAlleEtternavn() {  
-    
-    showMessageDialog(null, "1: Alle medlemmer, sortert på etternavn");
+  public static void visAlleEtternavn(ActionEvent e) {  
+    Stage secondaryStage = new Stage();
+    secondaryStage.setTitle("Medlemsregister"); 
+    secondaryStage.show(); 
    
     int antMedlem = 0;
     String utskrift = "";
@@ -145,7 +148,7 @@ public class MedlemsregisterJavaFX extends Application {
         int nr = rs.getInt("Nr");
         String eNavn = rs.getString("Etternavn");
         out.println(nr + " - " + eNavn);
-      } 
+      }
       
       conn.close(); // kobler av
       
@@ -156,7 +159,6 @@ public class MedlemsregisterJavaFX extends Application {
     }
   
   }
-
   // Vise alle Telefonnummere sortert på nr
   public static void visAlleTlf() {
 
@@ -392,8 +394,10 @@ public class MedlemsregisterJavaFX extends Application {
   }
 
   // Hente backup
-  private static void hentBackup() { 
-
+  private void hentBackup(ActionEvent e) { 
+    Stage secondaryStage = new Stage();
+    secondaryStage.setTitle("Hent Backup"); 
+    secondaryStage.show(); 
     
       
     int antMedlem = 0;
@@ -454,12 +458,12 @@ public class MedlemsregisterJavaFX extends Application {
       for (i=0; i<antMedlem; i++) 
           liste += medlemtabell[i].toString() + "\n";
           
-          showMessageDialog(null, liste);
+          tekstfelt.setText("" + liste);
 
     } 
     // catch error melding
-      catch (FileNotFoundException e) {
-      out.println(e.toString());
+      catch (FileNotFoundException fnfe) {
+      out.println(fnfe.toString());
     }
       catch (NumberFormatException ex) {
       out.println("Feilet grunn: " + ex.toString());
@@ -471,9 +475,6 @@ public class MedlemsregisterJavaFX extends Application {
         out.println("Skriver feil: " + ee.toString());
       }
     }
-   
-  public void behandleKlikk(ActionEvent e) {
-
-  }
+  
 public static void main(String[] args) { launch(args); }
 }

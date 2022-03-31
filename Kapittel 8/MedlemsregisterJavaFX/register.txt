@@ -1,0 +1,25 @@
+1;Nora;Rundt;Mellomlia, Bergen;13151731
+2;Frank;Rike;Stien 2, Larvik;14156727
+5;Per;Nille;Sjøgata 1, Bodø
+6;Olli;Gark;Vannkanten, Tromsø;88445252
+7;Gry;Telokk;Kokeplata 5, Egersund;21515378
+9;Diderik;Torve;Damstien 4, Stavern;22815747
+10;Peder;Olsen;Bakken 4, Bø
+11;Beret;Ning;Framvn. 2, Oslo
+12;Petter;Holen;Akersgata 15B, Oslo;33131587
+13;Jon Ola;Bakken;Bekkefaret 19, Arendal;41131527
+15;Frida;Tiden;Jonslia 2, Trondheim;42415271
+16;Edel;Steen;Klyve, Skien;43615374
+17;Petra;By;Fossvegen 23, Florø;44131507
+18;Kalle;Fjosen;Vegvegen 1, Gvarv
+19;Dina;Tjorven;Baklia 22A, Enebakk;44885547
+22;Rolf;Smedby;Erteriset, Halden;45131507
+24;Kjell;Valme;Tiriltoppen 44C, Oslo;45315709
+25;Anna;Verksemd;Dyrskuplassen, Seljord;48131557
+26;Kari Mari;Vossen;Stribakken 14, Bø;66725175
+27;Per;Pleks;Fugleleiken 7, Haugesund
+28;Lene;Langnes;Golgata 2, Geilo;77766655
+32;Ola;Paloma;Nedvegen 17, Molde;88112233
+33;Hans Olger;Lykken;Brattlia 11, Voss;98685511
+35;Olga;Lia;Stubbsveen, Eina;99665511
+36;Line;Jal;Krokvegen 34, Røros
