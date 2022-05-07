@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import static java.lang.Integer.*;
 
 public class Knappetest extends Application {
 
@@ -55,6 +56,7 @@ public class Knappetest extends Application {
     Scene scene = new Scene(panel, 300, 200);
     vindu.setTitle("Oljekalkulator'n");
     vindu.setScene(scene);
+    vindu.setResizable(false);
     vindu.show();
   }
   
@@ -71,11 +73,27 @@ public class Knappetest extends Application {
   }
 
   private void blankUtGUI() {
-
+    tekstLengde.setText("");
+    tekstHøyde.setText("");
+    tekstdypde.setText("");
+    tekstVolum.setText("");
   }
 
   private void gjennomførBeregning() {
+    try {
+    // henter inndata
+    int L = parseInt( tekstLengde.getText() );
+    int H = parseInt( tekstHøyde.getText() );
+    int D = parseInt( tekstDypde.getText() );
+    double R=H/2.0;
+    double V = L*(R*R*Math.acos((R -D)/ R) - (R-D)*Math.sqrt(D*(2*R-D)) );
+    V = V/1000; // 1000 cm^3 -> 1 liter
 
+    tekstVolum.setText("" + (int)Math.round(V));
+    }
+    catch (Exception e) {
+      out.println("Feilet: " + e.toString());
+    }
   }
 
 }
