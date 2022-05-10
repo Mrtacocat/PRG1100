@@ -33,7 +33,7 @@ public class Knappetest extends Application {
     Label høyde = new Label("Tankhøyde H i cm:");
     tekstHøyde = new TextField(); 
     tekstHøyde.setPrefColumnCount(10);
-    panel.getChildren().addAll(lengde, tekstLengde); 
+    panel.getChildren().addAll(høyde, tekstHøyde); 
  
     Label dypde = new Label("Oljedypde D i cm:");
     tekstDypde = new TextField(); 
@@ -75,7 +75,7 @@ public class Knappetest extends Application {
   private void blankUtGUI() {
     tekstLengde.setText("");
     tekstHøyde.setText("");
-    tekstdypde.setText("");
+    tekstDypde.setText("");
     tekstVolum.setText("");
   }
 
