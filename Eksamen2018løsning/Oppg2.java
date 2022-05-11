@@ -44,7 +44,13 @@ public class Oppg2 {
                 skriver.println(laveste+år + ": " + antallAv[år]);
             skriver.close();
             melding = "fødselsårstelling fullførst!";
-        }
+        } 
+        catch (IOException e) {
+            melding = "Problemer med fila:  " + "PRG1100B.txt";   
+          }
+          catch (NumberFormatException e) {
+            melding = "Datoformatet er ulesbart!";   
+    }
         catch (Exception e) {
             melding = "Problem: " + e.toString();
         } 

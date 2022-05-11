@@ -1,0 +1,12 @@
+Jan: 0
+Feb: 2
+Mar: 0
+Apr: 2
+Mai: 1
+Jun: 0
+Jul: 1
+Aug: 0
+Sep: 0
+Okt: 1
+Nov: 1
+Des: 1
