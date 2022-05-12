@@ -1,0 +1,6 @@
+1;Trimtrym;[1,7,4,6,8]
+2;Johndoe;[6,4]
+3;OleDole;[9,6,5,7]
+4;Nordmann;[6,7,3]
+5;Gunnar;[4]
+6;Geir;[9,4,3]
