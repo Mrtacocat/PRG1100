@@ -84,16 +84,19 @@ public class Oppg3 extends Application {
 
     private void gjennomførBeregning() {
         try {
-            int A = parseInt( txtAlder.getText() );
-            float H = Float.parseFloat( txtHøyde.getText() );
-            float V = Float.parseFloat( txtVekt.getText() );
-            double BMI=V/H*H;
-            double KFP=1.20*BMI+(0.23*A)-5.40;
+            int A = parseInt( txtAlder.getText() ); out.println(A);
+            float H = Float.parseFloat( txtHøyde.getText() ); out.println(H);
+            float V = Float.parseFloat( txtVekt.getText() ); out.println(V);
+            double BMI=V/(H*H); out.println(BMI + "bmi");
+            double KFP=(1.20*BMI)+(0.23*A)-liste; out.println(KFP + "kfp");
 
             txtKFP.setText("KFP = " + KFP);
         }
         catch (NumberFormatException ex) {
             out.println("Feilet: " + ex.toString());
+        }
+        catch (Exception e) {
+            txtKFP.setText("Velg kjønn!");
         }
     }
 
