@@ -8,7 +8,7 @@ public class Oppg1 {
 
     // konstruktør
     public Billett (String kjøper, int antall, double rabatt, double pris,
-                    String startSted, String sluttSted
+                    String startSted, String sluttSted,
                     String startTid, String sluttTid) {
         this.kjøper = kjøper;
         this.antall = antall;

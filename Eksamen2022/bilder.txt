@@ -1,0 +1,5 @@
+Solsikker;Vincent Van Gogh;Maleri;1888;73x92;innrammet
+Glad gutt;Gry Telokk;Akvarell;1999;102x45;uten ramme
+Elg i solnedgang;Ukjent;Maleri;1900;110x65;innrammet
+På solen jeg set;Anna Verksemd;Foto;2008;105x105;uten ramme
+Nattmåne;Per M. Pensel;Grafikk;2015;35x50;uten ramme

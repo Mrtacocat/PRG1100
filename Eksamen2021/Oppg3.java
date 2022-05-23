@@ -76,11 +76,11 @@ public class Oppg3 extends Application{
     }
     
     public void behandleKlikk(ActionEvent e) {  
-        if ( e.getSource() == knappDeltager )
+        /*if ( e.getSource() == knappDeltager )
           hentDeltager();
    else if ( e.getSource() == knappTopp )             
           hentTopp();          
-   else if ( e.getSource() == knappSortering )   
+   else */if ( e.getSource() == knappSortering )   
           hentSortering();    
    else if ( e.getSource() == knappBlankut )   
           blankUtDeltager();  
