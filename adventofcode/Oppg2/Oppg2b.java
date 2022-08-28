@@ -1,4 +1,4 @@
-/* Adventofcode 2019 */
+/* Adventofcode 2019 - Day 2*/
 
 import static java.lang.System.*;
 import static javax.swing.JOptionPane.*;
@@ -18,7 +18,7 @@ public class Oppg2 {
             reader.close();
 
             computer.ops[1] = 12;
-            computer.ops[1] = 2;
+            computer.ops[2] = 2;
 
             out.println("Svar: " + computer.RunProgram());
 
